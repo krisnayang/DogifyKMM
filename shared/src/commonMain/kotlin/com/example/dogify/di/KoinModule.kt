@@ -1,6 +1,9 @@
 package com.example.dogify.di
 
 import com.example.dogify.api.BreedsApi
+import com.example.dogify.database.createDriver
+import com.example.dogify.db.DogifyDatabase
+import com.example.dogify.repository.BreedsLocalSource
 import com.example.dogify.repository.BreedsRemoteSource
 import com.example.dogify.repository.BreedsRepository
 import com.example.dogify.usecase.FetchBreedsUseCase
@@ -13,6 +16,7 @@ import org.koin.dsl.module
 
 private val utilityModule = module {
   factory { getDispatcherProvider() }
+  single { DogifyDatabase(createDriver("dogify.db")) }
 }
 
 private val apiModule = module {
@@ -20,8 +24,9 @@ private val apiModule = module {
 }
 
 private val repositoryModule = module {
-  single { BreedsRepository(get()) }
+  single { BreedsRepository(get(), get()) }
   factory { BreedsRemoteSource(get(), get()) }
+  factory { BreedsLocalSource(get(), get()) }
 }
 
 private val usecaseModule = module {
