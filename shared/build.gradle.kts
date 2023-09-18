@@ -3,12 +3,10 @@ plugins {
     id("com.android.library")
     kotlin("plugin.serialization") version "1.6.10"
     id("com.squareup.sqldelight")
+    id("com.rickclephas.kmp.nativecoroutines") version "0.11.1"
 }
 
-@OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    targetHierarchy.default()
-
     android {
         compilations.all {
             kotlinOptions {
@@ -17,13 +15,11 @@ kotlin {
         }
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
+    ios {
+        binaries {
+            framework {
+                baseName = "shared"
+            }
         }
     }
 
