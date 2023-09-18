@@ -24,9 +24,7 @@ class MainViewModel(
 
   private val fetchBreeds: FetchBreedsUseCase,
 
-  private val onToggleFavouriteState:
-
-  ToggleFavouriteStateUseCase
+  private val onToggleFavouriteState: ToggleFavouriteStateUseCase
 
 ) : ViewModel() {
   private val _state = MutableStateFlow(State.LOADING)

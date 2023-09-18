@@ -1,8 +1,13 @@
 package com.example.dogify.usecase
 
 import com.example.dogify.model.Breed
+import com.example.dogify.repository.BreedsRepository
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 
-class FetchBreedsUseCase {
+class FetchBreedsUseCase: KoinComponent {
 
-  suspend fun invoke(): List<Breed> = listOf(Breed("Test fetch", ""), )
+  private val breedsRepository: BreedsRepository = get()
+
+  suspend operator fun invoke(): List<Breed> = breedsRepository.fetch()
 }

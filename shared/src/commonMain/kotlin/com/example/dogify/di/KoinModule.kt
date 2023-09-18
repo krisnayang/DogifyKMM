@@ -24,7 +24,7 @@ private val apiModule = module {
 }
 
 private val repositoryModule = module {
-  single { BreedsRepository(get(), get()) }
+  single { BreedsRepository() }
   factory { BreedsRemoteSource(get(), get()) }
   factory { BreedsLocalSource(get(), get()) }
 }
@@ -37,7 +37,9 @@ private val usecaseModule = module {
 
 private val sharedModules = listOf(usecaseModule, repositoryModule, apiModule, utilityModule)
 
-fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
-    appDeclaration()
-    modules(sharedModules)
+fun initKoin(appDeclaration: KoinAppDeclaration) = startKoin {
+  modules(sharedModules)
+  appDeclaration()
 }
+
+fun initKoin() = initKoin { }
