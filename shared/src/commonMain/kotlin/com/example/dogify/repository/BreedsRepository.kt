@@ -15,7 +15,8 @@ class BreedsRepository: KoinComponent {
 
     val breeds = localSource.breeds
 
-    internal suspend fun get() = with(localSource.selectAll()) {
+    @Throws(Exception::class)
+    suspend fun get() = with(localSource.selectAll()) {
         if (isNullOrEmpty()) {
             return@with fetch()
         } else {
@@ -23,7 +24,8 @@ class BreedsRepository: KoinComponent {
         }
     }
 
-    internal suspend fun fetch() = supervisorScope {
+    @Throws(Exception::class)
+    suspend fun fetch() = supervisorScope {
         remoteSource.getBreeds().map {
             async { Breed(name = it, imageUrl = remoteSource.getBreedImage(it)) }
         }.awaitAll().also {

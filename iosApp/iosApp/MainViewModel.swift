@@ -8,15 +8,9 @@
 
 import Foundation
 import shared
-import KMPNativeCoroutinesRxSwift
-import RxSwift
-import Combine
 
 class MainViewModel: ObservableObject {
     
-    private let repository = BreedsRepository.init()
-    private let getBreeds = GetBreedsUseCase.init()
-    private let fetchBreeds = FetchBreedsUseCase.init()
     private let onToggleFavouriteState = ToggleFavouriteStateUseCase.init()
     
     @Published
@@ -31,14 +25,23 @@ class MainViewModel: ObservableObject {
     @Published
     private var breeds: [Breed] = []
     
-    private let disposeBag = DisposeBag()
-    
     init() {
-        createObservable(for: repository.breedsNative).subscribe(onNext: { breeds in
+        fetchData()
+    }
+    
+    func fetchData() {
+        state = State.LOADING
+        
+        BreedsRepository().get { breeds, error in
             DispatchQueue.main.async {
-                self.breeds = breeds
+                if let breeds = breeds {
+                    self.state = State.NORMAL
+                    self.breeds = breeds
+                } else {
+                    self.state = State.ERROR
+                }
             }
-        }).disposed(by: disposeBag)
+        }
         
         $breeds.combineLatest($shouldFilterFavourites, { breeds, shouldFilterFavourites -> [Breed] in
             var result: [Breed] = []
@@ -54,42 +57,11 @@ class MainViewModel: ObservableObject {
             }
             return result
         }).assign(to: &$filteredBreeds)
-        
-        getData()
-    }
-    
-    func getData(){
-        state = State.LOADING
-        
-        createSingle(for: getBreeds.invokeNative()).subscribe(onSuccess: { _ in
-            DispatchQueue.main.async {
-                self.state = State.NORMAL
-            }
-        }, onFailure: { error in
-            DispatchQueue.main.async {
-                self.state = State.ERROR
-            }
-        }).disposed(by: disposeBag)
-    }
-    
-    func fetchData() {
-        state = State.LOADING
-        
-        createSingle(for: fetchBreeds.invokeNative()).subscribe(onSuccess: { _ in
-            DispatchQueue.main.async {
-                self.state = State.NORMAL
-            }
-        }, onFailure: { error in
-            DispatchQueue.main.async {
-                self.state = State.ERROR
-            }
-        }).disposed(by: disposeBag)
     }
     
     func onFavouriteTapped(breed: Breed){
-        createSingle(for: onToggleFavouriteState.invokeNative(breed: breed)).subscribe(onFailure: { error in
-            // We're going ignoring the failure, as it will be represented by the stream of breds
-        }).disposed(by: disposeBag)
+        onToggleFavouriteState.invoke(breed: breed) { error in }
+        fetchData()
     }
     
     enum State {
