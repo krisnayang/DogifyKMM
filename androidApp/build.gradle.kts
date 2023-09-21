@@ -5,11 +5,11 @@ plugins {
 
 android {
     namespace = "com.example.dogify.android"
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         applicationId = "com.example.dogify.android"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
     }
@@ -17,7 +17,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.7"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     packaging {
         resources {
@@ -50,7 +50,7 @@ dependencies {
             strictly("1.5.0-native-mt")
         }
     }
-    val composeVersion = "1.1.0-rc01"
+    val composeVersion = "1.5.1"
     // Android Kotlin extensions
     implementation("androidx.core:core-ktx:1.7.0")
     //region Jetpack Compose

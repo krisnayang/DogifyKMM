@@ -15,7 +15,6 @@ class BreedsRepository: KoinComponent {
 
     val breeds = localSource.breeds
 
-    @Throws(Exception::class)
     suspend fun get() = with(localSource.selectAll()) {
         if (isNullOrEmpty()) {
             return@with fetch()
@@ -24,10 +23,10 @@ class BreedsRepository: KoinComponent {
         }
     }
 
-    @Throws(Exception::class)
     suspend fun fetch() = supervisorScope {
         remoteSource.getBreeds().map {
-            async { Breed(name = it, imageUrl = remoteSource.getBreedImage(it)) }
+            //TODO: Need to change image url
+            async { Breed(name = it, imageUrl = "") }
         }.awaitAll().also {
             localSource.clear()
             it.map { async { localSource.insert(it) } }.awaitAll()

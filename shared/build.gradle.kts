@@ -1,8 +1,9 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    kotlin("plugin.serialization") version "1.6.10"
+    kotlin("plugin.serialization")
     id("com.squareup.sqldelight")
+    id("org.jetbrains.compose")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -26,6 +27,8 @@ kotlin {
             baseName = "shared"
         }
     }
+
+    jvm("desktop")
 
     sourceSets {
         val ktorVersion = "2.0.0-beta-1"
@@ -52,6 +55,10 @@ kotlin {
                 // Sql Delight
                 implementation("com.squareup.sqldelight:runtime:$sqlDelightVersion")
                 implementation("com.squareup.sqldelight:coroutines-extensions:$sqlDelightVersion")
+
+
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
             }
         }
         val commonTest by getting {
@@ -63,6 +70,9 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 api("io.insert-koin:koin-android:$koinVersion")
+                api("androidx.activity:activity-compose:1.7.2")
+                api("androidx.appcompat:appcompat:1.6.1")
+                api("androidx.core:core-ktx:1.10.1")
                 implementation("io.ktor:ktor-client-android:$ktorVersion")
                 implementation("com.squareup.sqldelight:android-driver:$sqlDelightVersion")
             }
@@ -74,13 +84,19 @@ kotlin {
                 implementation("com.squareup.sqldelight:native-driver:$sqlDelightVersion")
             }
         }
+
+        val desktopMain by getting {
+            dependencies {
+                implementation(compose.desktop.common)
+            }
+        }
     }
 }
 
 android {
     namespace = "com.example.dogify"
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         minSdk = 24
     }
