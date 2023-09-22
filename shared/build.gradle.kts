@@ -10,13 +10,7 @@ plugins {
 kotlin {
     targetHierarchy.default()
 
-    android {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = extra["jvmTarget"] as String
-            }
-        }
-    }
+    android()
 
     listOf(
         iosX64(),
@@ -34,7 +28,7 @@ kotlin {
     }
 
     sourceSets {
-        val ktorVersion = "2.0.0-beta-1"
+        val ktorVersion = "2.3.4"
         val sqlDelightVersion = "1.5.5"
         val koinVersion = "3.1.4"
 
@@ -50,11 +44,7 @@ kotlin {
 
                 // Serialization
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.2")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt") {
-                    version {
-                        strictly("1.6.0-native-mt")
-                    }
-                }
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
                 // Sql Delight
                 implementation("com.squareup.sqldelight:runtime:$sqlDelightVersion")
                 implementation("com.squareup.sqldelight:coroutines-extensions:$sqlDelightVersion")
@@ -75,7 +65,7 @@ kotlin {
                 api("io.insert-koin:koin-android:$koinVersion")
                 api("androidx.activity:activity-compose:1.7.2")
                 api("androidx.appcompat:appcompat:1.6.1")
-                api("androidx.core:core-ktx:1.10.1")
+                api("androidx.core:core-ktx:1.12.0")
                 implementation("io.ktor:ktor-client-android:$ktorVersion")
                 implementation("com.squareup.sqldelight:android-driver:$sqlDelightVersion")
             }
