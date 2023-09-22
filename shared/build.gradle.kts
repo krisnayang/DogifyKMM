@@ -13,7 +13,7 @@ kotlin {
     android {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = extra["jvmTarget"] as String
             }
         }
     }
@@ -27,8 +27,11 @@ kotlin {
             baseName = "shared"
         }
     }
-
-    jvm("desktop")
+    jvm("desktop") {
+        compilations.all {
+            kotlinOptions.jvmTarget = extra["jvmTarget"] as String
+        }
+    }
 
     sourceSets {
         val ktorVersion = "2.0.0-beta-1"

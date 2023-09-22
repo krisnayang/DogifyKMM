@@ -20,15 +20,17 @@ pluginManagement {
         id("org.jetbrains.compose").version(composeVersion)
     }
 }
-
 dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
 
 rootProject.name = "Dogify"
-include(":androidApp")
-include(":desktopApp")
-include(":shared")
+include(
+    ":androidApp",
+    ":desktopApp",
+    ":shared"
+)
