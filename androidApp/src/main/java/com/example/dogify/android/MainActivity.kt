@@ -8,18 +8,14 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.lifecycleScope
-import com.example.dogify.android.viewmodel.MainViewModel
-import com.example.dogify.model.Breed
-import com.example.dogify.usecase.FetchBreedsUseCase
-import com.example.dogify.usecase.GetBreedsUseCase
-import com.example.dogify.usecase.ToggleFavouriteStateUseCase
-import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.dogify.android.di.viewModelModule
+import com.example.dogify.viewmodel.MainViewModel
+import org.kodein.di.compose.withDI
+import org.kodein.di.instance
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel by viewModel<MainViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -28,7 +24,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen(viewModel)
+                    withDI(viewModelModule) {
+                        val viewModel: MainViewModel by viewModelModule.instance()
+                        MainScreen(viewModel)
+                    }
                 }
             }
         }

@@ -42,9 +42,9 @@ dependencies {
     implementation(project(":shared"))
     implementation("androidx.appcompat:appcompat:1.4.1")
     // Android Lifecycle
-    val lifecycleVersion = "2.3.1"
+    val lifecycleVersion = "2.6.2"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"){
         version {
             strictly("1.5.0-native-mt")

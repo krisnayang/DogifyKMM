@@ -21,19 +21,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
-import com.example.dogify.android.viewmodel.MainViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.example.dogify.model.Breed
+import com.example.dogify.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun MainScreen(viewModel: MainViewModel) {
-  val state by viewModel.state.collectAsState()
-  val breeds by viewModel.breeds.collectAsState()
-  val events by viewModel.events.collectAsState(Unit)
-  val isRefreshing by viewModel.isRefreshing.collectAsState()
-  val shouldFilterFavourites by viewModel.shouldFilterFavourites.collectAsState()
+fun MainScreen(mainViewModel: MainViewModel) {
+  val state by mainViewModel.state.collectAsState()
+  val breeds by mainViewModel.breeds.collectAsState()
+  val events by mainViewModel.events.collectAsState(Unit)
+  val isRefreshing by mainViewModel.isRefreshing.collectAsState()
+  val shouldFilterFavourites by mainViewModel.shouldFilterFavourites.collectAsState()
 
   val scaffoldState = rememberScaffoldState()
   val snackbarCoroutineScope = rememberCoroutineScope()
@@ -41,7 +41,7 @@ fun MainScreen(viewModel: MainViewModel) {
 //  Scaffold(scaffoldState = scaffoldState) {
     SwipeRefresh(
       state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
-      onRefresh = viewModel::refresh
+      onRefresh = mainViewModel::refresh
     ) {
       Column(
         Modifier
@@ -57,7 +57,7 @@ fun MainScreen(viewModel: MainViewModel) {
           Switch(
             checked = shouldFilterFavourites,
             modifier = Modifier.padding(horizontal = 8.dp),
-            onCheckedChange = { viewModel.onToggleFavouriteFilter() }
+            onCheckedChange = { mainViewModel.onToggleFavouriteFilter() }
           )
         }
         when (state) {
@@ -68,7 +68,7 @@ fun MainScreen(viewModel: MainViewModel) {
           }
           MainViewModel.State.NORMAL -> Breeds(
             breeds = breeds,
-            onFavouriteTapped = viewModel::onFavouriteTapped
+            onFavouriteTapped = mainViewModel::onFavouriteTapped
           )
 
           MainViewModel.State.ERROR -> {

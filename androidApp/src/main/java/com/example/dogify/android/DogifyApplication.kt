@@ -10,8 +10,7 @@ class DogifyApplication: Application() {
   override fun onCreate() {
     super.onCreate()
     initKoin {
-      androidContext(this@DogifyApplication)
-      modules(viewModelModule)
+        androidContext(this@DogifyApplication)
     }
   }
 }
